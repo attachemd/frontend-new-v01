@@ -1,20 +1,60 @@
-<form class="my-form">
+<!--<form class="my-form">-->
+<!--    <h3>Login Form</h3>-->
+<!--    <mat-form-field class="my-fields">-->
+<!--        <mat-label>User Name</mat-label>-->
+<!--        <input matInput [(ngModel)]="loginForm.username" name="username" />-->
+<!--    </mat-form-field>-->
+<!--    <mat-form-field class="my-fields">-->
+<!--        <mat-label>Password</mat-label>-->
+<!--        <input-->
+<!--            matInput-->
+<!--            type="password"-->
+<!--            [(ngModel)]="loginForm.password"-->
+<!--            name="password"-->
+<!--        />-->
+<!--    </mat-form-field>-->
+<!--    &lt;!&ndash; 01 LOGIN &ndash;&gt;-->
+<!--    <button mat-raised-button color="primary" (click)="userLogin()">-->
+<!--        Login-->
+<!--    </button>-->
+<!--</form>-->
+
+<form class="my-form" [formGroup]="loginForm" (ngSubmit)="onSubmit(loginForm.value)">
     <h3>Login Form</h3>
+    <div id="username-container">
     <mat-form-field class="my-fields">
         <mat-label>User Name</mat-label>
-        <input matInput [(ngModel)]="loginForm.username" name="username" />
+        <input
+            matInput
+            name="username"
+            formControlName="username" class="form-control"
+            [ngClass]="{ 'is-invalid': submitted && f.username.errors }"
+        />
     </mat-form-field>
+    </div>
+    <div id="password-container">
     <mat-form-field class="my-fields">
         <mat-label>Password</mat-label>
         <input
             matInput
             type="password"
-            [(ngModel)]="loginForm.password"
-            name="password"
+            formControlName="password"
+            class="form-control"
+            [ngClass]="{ 'is-invalid': submitted && f.password.errors }"
         />
     </mat-form-field>
+    </div>
+    <div id="username-error-msg" *ngIf="submitted && f.username.errors" class="invalid-feedback">
+        <div id="blank-username-error" *ngIf="f.username.errors.required" style="color:red">Please enter username.</div>
+    </div>
+
+    <div id="password-error-msg" *ngIf="submitted && f.password.errors" class="invalid-feedback">
+        <div id="blank-password-error" *ngIf="f.password.errors.required" style="color:red">Please enter password.</div>
+    </div>
+
     <!-- 01 LOGIN -->
-    <button mat-raised-button color="primary" (click)="userLogin()">
-        Login
-    </button>
+    <div id="login-btn-container" class="form-group">
+        <button mat-stroked-button color="primary">Login</button>
+
+    </div>
 </form>

@@ -23,12 +23,12 @@ describe('App Component', () => {
     //     fixture.detectChanges();
     // });
 
-    it('should 1 + 1', () => {
-        expect(1 + 1).toEqual(2);
-    });
-
-    it('should have a component', () => {
-
-        // expect(component).toBeTruthy();
-    });
+    // it('should 1 + 1', () => {
+    //     expect(1 + 1).toEqual(2);
+    // });
+    //
+    // it('should have a component', () => {
+    //
+    //     // expect(component).toBeTruthy();
+    // });
 });
