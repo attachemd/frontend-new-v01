@@ -103,25 +103,26 @@
 //
 // });
 
-import {LoginComponent} from "./login.component";
-import {async, ComponentFixture, fakeAsync, TestBed, tick} from "@angular/core/testing";
-import {FormBuilder, ReactiveFormsModule} from "@angular/forms";
-import {blankUser, validUser} from "../../mocks";
-import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-import {MatFormFieldModule} from "@angular/material/form-field";
-import {MatIconModule} from "@angular/material/icon";
-import {MatInputModule} from "@angular/material/input";
-import {AuthService} from "../services/auth.service";
-import {Router} from "@angular/router";
-import {RouterTestingModule} from "@angular/router/testing";
+import { LoginComponent } from "./login.component";
+import { async, ComponentFixture, fakeAsync, TestBed, tick } from "@angular/core/testing";
+import { FormBuilder, ReactiveFormsModule } from "@angular/forms";
+import { blankUser, validUser } from "../../mocks";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatIconModule } from "@angular/material/icon";
+import { MatInputModule } from "@angular/material/input";
+import { AuthService } from "../services/auth.service";
+import { Router } from "@angular/router";
+import { RouterTestingModule } from "@angular/router/testing";
+import { of } from "rxjs";
 
-const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
-const authServiceSpy = jasmine.createSpyObj('AuthService', ['userLogin']);
+const routerSpy = jasmine.createSpyObj("Router", ["navigateByUrl"]);
+const authServiceSpy = jasmine.createSpyObj("AuthService", ["userLogin"]);
 
-const testUserData = { id: 1, username: 'TekLoon'};
-const loginErrorMsg = 'Invalid Login';
+const testUserData = { id: 1, username: "TekLoon" };
+const loginErrorMsg = "Invalid Login";
 
-describe('Login Component Isolated Test', () => {
+describe("Login Component Isolated Test", () => {
     let component: LoginComponent;
 
     beforeEach(async(() => {
@@ -129,15 +130,15 @@ describe('Login Component Isolated Test', () => {
     }));
 
     function updateForm(userEmail: string, userPassword: string) {
-        component.loginForm.controls['username'].setValue(userEmail);
-        component.loginForm.controls['password'].setValue(userPassword);
+        component.loginForm.controls["username"].setValue(userEmail);
+        component.loginForm.controls["password"].setValue(userPassword);
     }
 
-    it('Component successfully created', () => {
+    it("Component successfully created", () => {
         expect(component).toBeTruthy();
     });
 
-    it('component initial state', () => {
+    it("component initial state", () => {
         expect(component.submitted).toBeFalsy();
         expect(component.loginForm).toBeDefined();
         expect(component.loginForm.invalid).toBeTruthy();
@@ -145,26 +146,26 @@ describe('Login Component Isolated Test', () => {
         expect(component.authErrorMsg).toBeUndefined();
     });
 
-    it('submitted should be true when onSubmit()', () => {
+    it("submitted should be true when onSubmit()", () => {
         component.onSubmit(blankUser);
         expect(component.submitted).toBeTruthy();
         expect(component.authError).toBeFalsy();
     });
 
-    it('form value should update from when u change the input', (() => {
+    it("form value should update from when u change the input", (() => {
         updateForm(validUser.username, validUser.password);
         expect(component.loginForm.value).toEqual(validUser);
     }));
 
 });
 
-describe('Login Component Shallow Test', () => {
+describe("Login Component Shallow Test", () => {
 
     let fixture: ComponentFixture<LoginComponent>;
 
     function updateForm(userEmail: string, userPassword: string) {
-        fixture.componentInstance.loginForm.controls['username'].setValue(userEmail);
-        fixture.componentInstance.loginForm.controls['password'].setValue(userPassword);
+        fixture.componentInstance.loginForm.controls["username"].setValue(userEmail);
+        fixture.componentInstance.loginForm.controls["password"].setValue(userPassword);
     }
 
     beforeEach(async(() => {
@@ -187,156 +188,162 @@ describe('Login Component Shallow Test', () => {
                     useValue: routerSpy
                 }
             ],
-            declarations: [LoginComponent],
+            declarations: [LoginComponent]
         }).compileComponents();
         fixture = TestBed.createComponent(LoginComponent);
     }));
 
-    it('created a form with username and password input and login button', () => {
+    it("created a form with username and password input and login button", () => {
         // const fixture = TestBed.createComponent(LoginComponent);
-        const usernameContainer = fixture.debugElement.nativeElement.querySelector('#username-container');
-        const passwordContainer = fixture.debugElement.nativeElement.querySelector('#password-container');
-        const loginBtnContainer = fixture.debugElement.nativeElement.querySelector('#login-btn-container');
+        const usernameContainer = fixture.debugElement.nativeElement.querySelector("#username-container");
+        const passwordContainer = fixture.debugElement.nativeElement.querySelector("#password-container");
+        const loginBtnContainer = fixture.debugElement.nativeElement.querySelector("#login-btn-container");
         expect(usernameContainer).toBeDefined();
         expect(passwordContainer).toBeDefined();
         expect(loginBtnContainer).toBeDefined();
     });
 
-    it('Display Username Error Msg when Username is blank', () => {
+    it("Display Username Error Msg when Username is blank", () => {
         updateForm(blankUser.username, validUser.password);
         fixture.detectChanges();
 
-        const button = fixture.debugElement.nativeElement.querySelector('button');
+        const button = fixture.debugElement.nativeElement.querySelector("button");
         button.click();
         fixture.detectChanges();
 
-        const usernameErrorMsg = fixture.debugElement.nativeElement.querySelector('#username-error-msg');
+        const usernameErrorMsg = fixture.debugElement.nativeElement.querySelector("#username-error-msg");
         expect(usernameErrorMsg).toBeDefined();
-        expect(usernameErrorMsg.innerHTML).toContain('Please enter username');
+        expect(usernameErrorMsg.innerHTML).toContain("Please enter username");
     });
 
-    it('Display Password Error Msg when Username is blank', () => {
+    it("Display Password Error Msg when Username is blank", () => {
         updateForm(validUser.username, blankUser.password);
         fixture.detectChanges();
 
-        const button = fixture.debugElement.nativeElement.querySelector('button');
+        const button = fixture.debugElement.nativeElement.querySelector("button");
         button.click();
         fixture.detectChanges();
 
-        const passwordErrorMsg = fixture.debugElement.nativeElement.querySelector('#password-error-msg');
+        const passwordErrorMsg = fixture.debugElement.nativeElement.querySelector("#password-error-msg");
         expect(passwordErrorMsg).toBeDefined();
-        expect(passwordErrorMsg.innerHTML).toContain('Please enter password');
+        expect(passwordErrorMsg.innerHTML).toContain("Please enter password");
     });
 
-    it('Display Both Username & Password Error Msg when both field is blank', () => {
+    it("Display Both Username & Password Error Msg when both field is blank", () => {
         updateForm(blankUser.username, blankUser.password);
         fixture.detectChanges();
 
-        const button = fixture.debugElement.nativeElement.querySelector('button');
+        const button = fixture.debugElement.nativeElement.querySelector("button");
         button.click();
         fixture.detectChanges();
 
-        const usernameErrorMsg = fixture.debugElement.nativeElement.querySelector('#username-error-msg');
-        const passwordErrorMsg = fixture.debugElement.nativeElement.querySelector('#password-error-msg');
+        const usernameErrorMsg = fixture.debugElement.nativeElement.querySelector("#username-error-msg");
+        const passwordErrorMsg = fixture.debugElement.nativeElement.querySelector("#password-error-msg");
 
         expect(usernameErrorMsg).toBeDefined();
-        expect(usernameErrorMsg.innerHTML).toContain('Please enter username');
+        expect(usernameErrorMsg.innerHTML).toContain("Please enter username");
 
         expect(passwordErrorMsg).toBeDefined();
-        expect(passwordErrorMsg.innerHTML).toContain('Please enter password');
+        expect(passwordErrorMsg.innerHTML).toContain("Please enter password");
     });
 
-    it('When username is blank, username field should display red outline ', () => {
+    it("When username is blank, username field should display red outline ", () => {
         updateForm(blankUser.username, validUser.password);
         fixture.detectChanges();
-        const button = fixture.debugElement.nativeElement.querySelector('button');
+        const button = fixture.debugElement.nativeElement.querySelector("button");
         button.click();
         fixture.detectChanges();
 
-        const inputs = fixture.debugElement.nativeElement.querySelectorAll('input');
+        const inputs = fixture.debugElement.nativeElement.querySelectorAll("input");
         const usernameInput = inputs[0];
 
-        expect(usernameInput.classList).toContain('is-invalid');
+        expect(usernameInput.classList).toContain("is-invalid");
     });
 
-    it('When password is blank, password field should display red outline ', () => {
+    it("When password is blank, password field should display red outline ", () => {
         updateForm(validUser.username, blankUser.password);
         fixture.detectChanges();
-        const button = fixture.debugElement.nativeElement.querySelector('button');
+        const button = fixture.debugElement.nativeElement.querySelector("button");
         button.click();
         fixture.detectChanges();
 
-        const inputs = fixture.debugElement.nativeElement.querySelectorAll('input');
+        const inputs = fixture.debugElement.nativeElement.querySelectorAll("input");
         const passwordInput = inputs[1];
 
-        expect(passwordInput.classList).toContain('is-invalid');
+        expect(passwordInput.classList).toContain("is-invalid");
     });
 
 });
 
-// describe('Login Component Integrated Test', () => {
-//     let fixture: ComponentFixture<LoginComponent>;
-//     let loginSpy;
-//
-//     function updateForm(userEmail: string, userPassword: string) {
-//         fixture.componentInstance.loginForm.controls['username'].setValue(userEmail);
-//         fixture.componentInstance.loginForm.controls['password'].setValue(userPassword);
-//     }
-//
-//     beforeEach(async(() => {
-//         TestBed.configureTestingModule({
-//             imports: [
-//                 RouterTestingModule,
-//                 BrowserAnimationsModule,
-//                 ReactiveFormsModule,
-//                 MatFormFieldModule,
-//                 MatIconModule,
-//                 MatInputModule
-//             ],
-//             providers: [
-//                 {provide: AuthService, useValue: authServiceSpy},
-//                 FormBuilder,
-//                 {provide: Router, useValue: routerSpy}
-//             ],
-//             declarations: [LoginComponent],
-//         }).compileComponents();
-//
-//         fixture = TestBed.createComponent(LoginComponent);
-//         // router = TestBed.get(Router);
-//
-//         loginSpy = authServiceSpy.userLogin.and.returnValue(Promise.resolve(testUserData));
-//
-//     }));
-//
-//     it('authService userLogin() should called ', fakeAsync(() => {
-//         updateForm(validUser.username, validUser.password);
-//         fixture.detectChanges();
-//         const button = fixture.debugElement.nativeElement.querySelector('button');
-//         button.click();
-//         fixture.detectChanges();
-//
-//         expect(authServiceSpy.userLogin).toHaveBeenCalled();
-//     }));
-//
-//     it('should route to home if userLogin successfully', fakeAsync(() => {
-//         updateForm(validUser.username, validUser.password);
-//         fixture.detectChanges();
-//         const button = fixture.debugElement.nativeElement.querySelector('button');
-//         button.click();
-//         advance(fixture);
-//
-//         loginSpy = authServiceSpy.userLogin.and.returnValue(Promise.resolve(testUserData));
-//         advance(fixture);
-//
-//         expect(routerSpy.navigateByUrl).toHaveBeenCalled();
-//         const navArgs = routerSpy.navigateByUrl.calls.first().args[0];
-//         // expecting to navigate to id of the component's first hero
-//         expect(navArgs).toBe('/dashboard', 'should nav to Home Page');
-//     }));
-//
-//     function advance(f: ComponentFixture<any>) {
-//         tick();
-//         f.detectChanges();
-//     }
-//
-// });
+describe("Login Component Integrated Test", () => {
+    let fixture: ComponentFixture<LoginComponent>;
+    let loginSpy;
+
+    function updateForm(userEmail: string, userPassword: string) {
+        fixture.componentInstance.loginForm.controls["username"].setValue(userEmail);
+        fixture.componentInstance.loginForm.controls["password"].setValue(userPassword);
+    }
+
+    beforeEach(async(() => {
+        TestBed.configureTestingModule({
+            imports: [
+                RouterTestingModule,
+                BrowserAnimationsModule,
+                ReactiveFormsModule,
+                MatFormFieldModule,
+                MatIconModule,
+                MatInputModule
+            ],
+            providers: [
+                { provide: AuthService, useValue: authServiceSpy },
+                FormBuilder,
+                { provide: Router, useValue: routerSpy }
+            ],
+            declarations: [LoginComponent]
+        }).compileComponents();
+
+        fixture = TestBed.createComponent(LoginComponent);
+        // router = TestBed.get(Router);
+
+        loginSpy = authServiceSpy.userLogin.and.returnValue(of(testUserData));
+
+    }));
+
+    it(
+        "authService userLogin() should be called ",
+        fakeAsync(() => {
+            updateForm(validUser.username, validUser.password);
+            fixture.detectChanges();
+            const button = fixture.debugElement.nativeElement.querySelector("button");
+            button.click();
+            fixture.detectChanges();
+
+            expect(authServiceSpy.userLogin).toHaveBeenCalled();
+        })
+    );
+
+    it(
+        "should route to dashboard if userLogin successfully",
+        fakeAsync(() => {
+            updateForm(validUser.username, validUser.password);
+            fixture.detectChanges();
+            const button = fixture.debugElement.nativeElement.querySelector("button");
+            button.click();
+            advance(fixture);
+
+            loginSpy = authServiceSpy.userLogin.and.returnValue(of(testUserData));
+            advance(fixture);
+
+            expect(routerSpy.navigateByUrl).toHaveBeenCalled();
+            const navArgs = routerSpy.navigateByUrl.calls.first().args[0];
+            console.log('navArgs: ', navArgs);
+            expect(navArgs).toBe("/dashboard", "should nav to dashboard Page");
+        })
+    );
+
+    function advance(f: ComponentFixture<any>) {
+        tick();
+        f.detectChanges();
+    }
+
+});

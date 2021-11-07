@@ -95,7 +95,7 @@ export class LoginComponent implements OnInit {
                 console.log('LoginComponent userLogin value: ', value);
                 // this.data = value;
                 if (value) {
-                    this.router.navigate(['/dashboard']);
+                    this.router.navigateByUrl('/dashboard');
                 } else {
                     console.error('failed');
                 }
