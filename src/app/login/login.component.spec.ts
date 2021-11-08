@@ -152,7 +152,7 @@ describe("Login Component Isolated Test", () => {
         expect(component.authError).toBeFalsy();
     });
 
-    it("form value should update from when u change the input", (() => {
+    it("form value should update when u change the input", (() => {
         updateForm(validUser.username, validUser.password);
         expect(component.loginForm.value).toEqual(validUser);
     }));
@@ -295,9 +295,15 @@ describe("Login Component Integrated Test", () => {
                 MatInputModule
             ],
             providers: [
-                { provide: AuthService, useValue: authServiceSpy },
+                {
+                    provide: AuthService,
+                    useValue: authServiceSpy
+                },
                 FormBuilder,
-                { provide: Router, useValue: routerSpy }
+                {
+                    provide: Router,
+                    useValue: routerSpy
+                }
             ],
             declarations: [LoginComponent]
         }).compileComponents();
