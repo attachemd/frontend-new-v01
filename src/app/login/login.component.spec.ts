@@ -216,7 +216,7 @@ describe("Login Component Shallow Test", () => {
         expect(usernameErrorMsg.innerHTML).toContain("Please enter username");
     });
 
-    it("Display Password Error Msg when Username is blank", () => {
+    it("Display Password Error Msg when Password is blank", () => {
         updateForm(validUser.username, blankUser.password);
         fixture.detectChanges();
 
@@ -342,6 +342,7 @@ describe("Login Component Integrated Test", () => {
 
             expect(routerSpy.navigateByUrl).toHaveBeenCalled();
             const navArgs = routerSpy.navigateByUrl.calls.first().args[0];
+            console.log('routerSpy.navigateByUrl.calls.first(): ', routerSpy.navigateByUrl.calls.first());
             console.log('navArgs: ', navArgs);
             expect(navArgs).toBe("/dashboard", "should nav to dashboard Page");
         })

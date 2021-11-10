@@ -28,7 +28,7 @@
             matInput
             name="username"
             formControlName="username" class="form-control"
-            [ngClass]="{ 'is-invalid': submitted && f.username.errors }"
+            [ngClass]="{ 'is-invalid': submitted && loginFormControls.username.errors }"
         />
     </mat-form-field>
     </div>
@@ -40,16 +40,16 @@
             type="password"
             formControlName="password"
             class="form-control"
-            [ngClass]="{ 'is-invalid': submitted && f.password.errors }"
+            [ngClass]="{ 'is-invalid': submitted && loginFormControls.password.errors }"
         />
     </mat-form-field>
     </div>
-    <div id="username-error-msg" *ngIf="submitted && f.username.errors" class="invalid-feedback">
-        <div id="blank-username-error" *ngIf="f.username.errors.required" style="color:red">Please enter username.</div>
+    <div id="username-error-msg" *ngIf="submitted && loginFormControls.username.errors" class="invalid-feedback">
+        <div id="blank-username-error" *ngIf="loginFormControls.username.errors.required" style="color:red">Please enter username.</div>
     </div>
 
-    <div id="password-error-msg" *ngIf="submitted && f.password.errors" class="invalid-feedback">
-        <div id="blank-password-error" *ngIf="f.password.errors.required" style="color:red">Please enter password.</div>
+    <div id="password-error-msg" *ngIf="submitted && loginFormControls.password.errors" class="invalid-feedback">
+        <div id="blank-password-error" *ngIf="loginFormControls.password.errors.required" style="color:red">Please enter password.</div>
     </div>
 
     <!-- 01 LOGIN -->

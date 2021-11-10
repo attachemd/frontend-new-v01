@@ -64,7 +64,7 @@ export class LoginComponent implements OnInit {
 
     ngOnInit(): void {}
 
-    get f() {
+    get loginFormControls() {
         return this.loginForm.controls;
     }
 
