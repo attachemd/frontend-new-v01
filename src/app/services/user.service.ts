@@ -9,6 +9,9 @@ export class UserService {
 
     getUser() {
         // API_USER 01
-        return this.http.get<{ username: string; id: number }>('/api/user/');
+        return this.http
+            .get<{ username: string; id: number }>(
+                '/api/user/'
+            );
     }
 }
